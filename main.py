@@ -145,8 +145,8 @@ class ContractGeneratorApp:
                 name=values["nazwa"],
                 postal_code=values["kod_pocztowy"],
                 city=values["miasto"],
-                street=values["adres"].split()[0],
-                house_number=values["adres"].split()[-1],
+                street=values["ulica"],
+                house_number=values["numer_domu"],
                 email=values["email"],
                 phone=values["tel"]
             )

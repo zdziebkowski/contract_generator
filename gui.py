@@ -120,9 +120,10 @@ class ContractForm(ttk.Frame):
             "nazwa": self.name_entry.get(),
             "kod_pocztowy": self.data_vars["postal"].get().split(':')[0].strip() if ':' in self.data_vars["postal"].get() else self.data_vars["postal"].get(),
             "miasto": self.data_vars["city"].get(),
-            "adres": f"{self.street_entry.get()} {self.house_entry.get()}",
+            "ulica": self.street_entry.get(),
+            "numer_domu": self.house_entry.get(),
             "email": self.email_entry.get() or "-",
-            "tel": self.phone_entry.get() or "-"
+            "tel": self.phone_entry.get() or "-",
         }
 
     def clear_fields(self):

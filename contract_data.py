@@ -6,7 +6,6 @@ import re
 from datetime import datetime
 import pandas as pd
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -19,8 +18,8 @@ class ContractData:
     city: str
     street: str
     house_number: str
-    email: Optional[str] = None
-    phone: Optional[str] = None
+    email: str = "-"
+    phone: str = "-"
 
     @property
     def full_address(self) -> str:
@@ -35,7 +34,8 @@ class ContractData:
             'nazwa': self.name,
             'kod_pocztowy': self.postal_code,
             'miasto': self.city,
-            'adres': self.full_address,
+            'ulica': self.street,
+            'numer_domu': self.house_number,
             'email': self.email or "-",
             'tel': self.phone or "-",
             'nr': str(contract_number),
@@ -72,8 +72,8 @@ class ContractManager:
                 'Nazwa/Imię i nazwisko': contract_data['nazwa'],
                 'Kod pocztowy': contract_data['kod_pocztowy'],
                 'Miasto': contract_data['miasto'],
-                'Ulica': contract_data['adres'].split()[0],
-                'Numer domu': contract_data['adres'].split()[-1],
+                'Ulica': contract_data['ulica'],
+                'Numer domu': contract_data['numer_domu'],
                 'Email': contract_data['email'],
                 'Telefon': contract_data['tel'],
                 'Data dodania': datetime.now().strftime("%d.%m.%Y %H:%M")
