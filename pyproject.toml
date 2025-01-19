@@ -1,17 +1,23 @@
 [tool.poetry]
 name = "umowy-na-wywoz-nieczystosci"
 version = "0.1.0"
-description = ""
+description = "Desktop application for generating, numbering and managing waste disposal service contracts with Excel registry integration."
 authors = ["zdziebkowski <wojciech.zdziebkowski@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<3.14"
 docxtpl = "^0.19.1"
 pandas = "^2.2.3"
 openpyxl = "^3.1.5"
 tkcalendar = "^1.6.1"
 
+[tool.poetry.group.dev.dependencies]
+pyinstaller = {version = "^6.11.1", python = ">=3.11,<3.14"}
+pillow = "^11.1.0"
+
+[tool.poetry.scripts]
+build = "build:build_exe"
 
 [build-system]
 requires = ["poetry-core"]

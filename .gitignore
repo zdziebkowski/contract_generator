@@ -5,13 +5,39 @@ __pycache__/
 .env
 venv/
 
-# Project specific
-*.xlsx    # Excel files
-*.docx    # Word documents
-poetry.lock     # Poetry lock file if you want to track it explicitly
-/External Libraries/
-/Scratches and Consoles/
+# Build and distribution
+build/
+dist/
+*.spec
+Contract_Generator.spec
+base_library.zip
+
+# Private business assets
+Logo_Zdziebkowscy.png
+contract.ico
+Umowa_template.docx
+spis_umow_automat.xlsx
+convert_icon.py
+wystawione_umowy/
 
 # IDE specific
 .idea/
 .vscode/
+/External Libraries/
+/Scratches and Consoles/
+
+# IDE indexing
+.pytest_cache/
+*.iml
+.idea_modules/
+*.iws
+out/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Operating System
+.DS_Store
+Thumbs.db
