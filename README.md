@@ -1,39 +1,149 @@
 # Contract Generator
 
-A dedicated application for generating waste disposal service contracts. The application enables quick contract generation with customers and maintains a contract registry in an Excel file.
+A dedicated application for generating waste disposal service contracts, developed as a solution for automating contract management processes. This project demonstrates the implementation of a business automation tool using Python and modern development practices.
 
 ## Features
 
-- Contract generation based on a .docx template
-- Automatic contract numbering
-- Basic postal code validation for selected municipalities
-- Contract registry in Excel format
-- User-friendly interface
+### Core Functionality
+- Contract generation based on customizable .docx templates
+- Automatic contract numbering with municipality-specific sequences
+- Postal code validation for selected municipalities
+- Comprehensive contract registry in Excel format
+- User-friendly graphical interface
+- Automatic data validation and error checking
+- Separate address fields for street and house number
+- Electronic document handling
 
-## Important Note on Data Validation
-
-The application implements basic data validation focused on essential business requirements. It includes:
-- Postal code validation for specific municipalities
-- Required field checks
+### Important Note on Data Validation
+The application implements targeted data validation focusing on critical business requirements:
+- Municipality-specific postal code validation
+- Required field verification
 - Contract number sequence management
+- Address format validation
+- Basic data integrity checks
 
-Full data validation (e.g., email format, phone number format) is not implemented as it wasn't required for the current business needs. Users should verify the entered data before generating contracts.
+Note: Advanced validation (email format, phone number format) is not implemented as per current business requirements. Users should verify data accuracy before contract generation.
 
-## System Requirements
+### System Requirements
+- Operating System: Windows 10 or Windows 11
+- Required Software:
+  - Microsoft Word (for contract generation and viewing)
+  - Microsoft Excel (for registry access)
+- System Access:
+  - Write permissions in the installation directory
+  - Network access for multi-user environments
+- Hardware:
+  - Minimum 4GB RAM
+  - 100MB free disk space
 
-- Windows 10/11
-- Write permissions in the installation folder
-- Microsoft Word (for opening generated contracts)
-- Microsoft Excel (for viewing contract registry)
+### Usage Process
+1. **Initial Setup**
+   - Install application from provided package
+   - Verify template file availability
+   - Configure user permissions
 
-## For Users
+2. **Customer Data Entry**
+   - Select contract date
+   - Choose municipality from approved list
+   - Enter customer details:
+     * Full name/Company name
+     * Address information
+     * Contact details (optional)
 
-### Installation
+3. **Contract Generation**
+   - System validates all entered data
+   - Generates unique contract number
+   - Creates contract document from template
+   - Saves in designated folder structure
+
+4. **Registry Management**
+   - Automatically updates Excel registry
+   - Maintains contract sequence
+   - Stores customer information
+   - Enables easy contract tracking
+
+5. **Document Handling**
+   - Generated contracts saved in 'wystawione_umowy'
+   - Original template preserved
+   - Backup system for generated documents
+
+## Technical Implementation
+
+### Technologies Used
+- Python 3.11
+- Poetry for dependency management
+- PyQt6 for the graphical interface
+- python-docx for Word document handling
+- pandas for Excel registry management
+- Custom validation system for business rules
+
+### Architecture Highlights
+The project follows a modular architecture with clear separation of concerns:
+```
+contract-generator/
+├── main.py                 # Application entry point and initialization
+├── config.py              # Configuration management
+├── contract_data.py       # Contract data handling and processing
+├── validators.py          # Custom validation system
+├── gui.py                 # User interface implementation
+└── build.py              # Build system for executable generation
+```
+
+### Key Development Features
+1. **Template System**
+   - Implemented dynamic document generation using python-docx
+   - Created a variable replacement system for template processing
+   - Developed robust error handling for document processing
+
+2. **Data Validation**
+   - Built a custom validation system for postal codes
+   - Implemented business rule validation
+   - Created user input validation with immediate feedback
+
+3. **User Interface**
+   - Designed an intuitive form-based interface
+   - Implemented real-time validation feedback
+   - Created a streamlined contract generation workflow
+
+4. **Data Management**
+   - Developed an Excel-based registry system
+   - Implemented automatic contract numbering
+   - Created data persistence for configuration
+
+5. **Build System**
+   - Set up automated build process using PyInstaller
+   - Configured dependency management with Poetry
+   - Implemented version control with Git
+
+## Development Process
+
+### Project Setup and Dependencies
+```bash
+# Environment setup using Poetry
+poetry init
+poetry add PyQt6 python-docx pandas
+poetry add --group dev pytest pyinstaller
+```
+
+### Build Process
+```bash
+# Building executable
+poetry run pyinstaller --onefile --windowed main.py
+```
+
+### Development Best Practices
+- Modular code structure for maintainability
+- Comprehensive error handling
+- User-centric design approach
+- Automated build process
+- Version control with Git
+
+## Installation Instructions
 
 1. Extract `Contract_Generator.zip` to your preferred folder
 2. Ensure the folder contains:
    - Contract_Generator.exe
-3. Create template file for your contract in *.docx format
+   - Umowa_template.docx (contract template)
 
 ### First Launch
 
@@ -42,126 +152,26 @@ Full data validation (e.g., email format, phone number format) is not implemente
 3. Click "More info" and then "Run anyway"
 4. The program will automatically create required folders and files
 
-### Usage
+## Contract Template Structure
 
-1. Fill in the customer data form:
-   - Contract date
-   - Municipality (select from list)
-   - Name/Full name
-   - Postal code (select from list)
-   - Street
-   - House number
-   - Email (optional)
-   - Phone (optional)
-
-2. Click "Generate contract"
-3. The generated contract will be saved in the "wystawione_umowy" folder
-4. Contract data will be added to the Excel registry
-
-## For Developers
-
-### Development Requirements
-
-- Python 3.11 or newer
-- Poetry (dependency management)
-- Git (optional, for code management)
-
-### Development Environment Setup
-
-1. Clone the repository:
-```bash
-git clone [repository-address]
-cd contract-generator
-```
-
-2. Install dependencies using Poetry:
-```bash
-poetry install
-```
-
-### Project Structure
-
-```
-contract-generator/
-├── main.py                 # Main application file
-├── config.py              # Configuration (postal codes, municipalities)
-├── contract_data.py       # Contract data handling
-├── validators.py          # Data validation
-├── gui.py                 # User interface
-├── build.py              # Exe build script
-├── pyproject.toml        # Poetry configuration
-└── README.md             # This file
-```
-
-### Building the Application
-
-1. Run the build script:
-```bash
-poetry run python build.py
-```
-
-2. The executable will be created in the `dist` folder
-
-### Modifications
-
-#### Adding New Municipalities
-
-1. Open `config.py`
-2. Add new municipality to `VALID_GMINAS` dictionary
-3. Add postal codes for the municipality in `GMINA_POSTAL_CODES`
-
-#### Creating and Modifying Contract Template
-
-The contract template file is not included in the repository due to business privacy. You'll need to create your own template document. Here's how:
-
-1. Create a new Word document named `Umowa_template.docx`
-2. Design your contract using the following variables where you need dynamic content:
-   - {{nr}} - contract number (automatically generated)
-   - {{rok}} - year (automatically generated)
-   - {{gmina}} - municipality code (selected from dropdown)
-   - {{data}} - contract date (from date picker)
-   - {{nazwa}} - customer name (text input)
-   - {{kod_pocztowy}} - postal code (selected from dropdown)
-   - {{miasto}} - city (automatically filled based on postal code)
-   - {{adres}} - street and number (text input)
-   - {{email}} - email (optional text input)
-   - {{tel}} - phone (optional text input)
-
-Required Document Structure:
-1. The document must be in .docx format
-2. Variables must be written exactly as shown above, including double curly braces
-3. The template should include all your standard contract terms and conditions
-4. You can include static text and formatting as needed
-5. The variables will be automatically replaced with actual data when generating contracts
-
-Example Usage in Template:
-```
-Contract No: {{nr}}/{{rok}}/{{gmina}}
-Date: {{data}}
-
-AGREEMENT
-
-between [Your Company Name], hereinafter referred to as the Contractor, and
-
-{{nazwa}}
-{{adres}}
-{{kod_pocztowy}} {{miasto}}
-Email: {{email}}
-Phone: {{tel}}
-
-hereinafter referred to as the Client...
-```
-
-To modify existing template:
-1. Open `Umowa_template.docx`
-2. Edit the template while preserving the `{{variable}}` markers
-3. Save the document in the same location as the executable
+The contract template uses the following variables for dynamic content:
+- {{nr}} - contract number (automatically generated)
+- {{rok}} - year (automatically generated)
+- {{gmina}} - municipality code
+- {{data}} - contract date
+- {{nazwa}} - customer name
+- {{kod_pocztowy}} - postal code
+- {{miasto}} - city
+- {{adres}} - street and number
+- {{email}} - email
+- {{tel}} - phone
 
 ## Support
 
 For application support, please contact:
 - Email: wojciech.zdziebkowski@gmail.com
 
-## License
+## License and Usage
 
-This software is the property of Zdziebkowski Sp. z o.o. and is protected by copyright law. All rights reserved.
+© 2024 Zdziebkowscy Sp. z o.o. All rights reserved.
+The technical documentation provided here outlines the development approach and implementation details while the software itself remains under exclusive ownership of Zdziebkowscy Sp. z o.o.
