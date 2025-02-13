@@ -176,9 +176,6 @@ class ContractGeneratorApp:
             doc = DocxTemplate(self.path_vars["template"].get())
             doc.render(template_data)
 
-            # Po utworzeniu template_data
-            print("Debug - template_data:", template_data)  # Sprawdź czy miejscowość jest w danych
-
             # Save contract
             filename = f"Umowa_{contract_number}_{year}_{values['gmina']}_{values['nazwa']}.docx"
             output_path = os.path.join(self.path_vars["contracts"].get(), filename)
