@@ -156,7 +156,7 @@ class ContractGeneratorApp:
                 name=values["nazwa"],
                 postal_code=values["kod_pocztowy"],
                 city=values["miasto"],
-                location=values["miejscowosc"],  # Dodajemy to pole
+                location=values["miejscowosc"],
                 street=values["ulica"],
                 house_number=values["numer_domu"],
                 email=values["email"],
@@ -175,6 +175,9 @@ class ContractGeneratorApp:
             template_data = contract_data.to_dict(contract_number, year)
             doc = DocxTemplate(self.path_vars["template"].get())
             doc.render(template_data)
+
+            # Po utworzeniu template_data
+            print("Debug - template_data:", template_data)  # Sprawdź czy miejscowość jest w danych
 
             # Save contract
             filename = f"Umowa_{contract_number}_{year}_{values['gmina']}_{values['nazwa']}.docx"
