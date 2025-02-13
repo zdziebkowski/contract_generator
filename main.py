@@ -91,6 +91,12 @@ class ContractGeneratorApp:
             allowed_codes = GMINA_POSTAL_CODES.get(gmina_code, [])
             self.contract_form.update_postal_codes(allowed_codes)
 
+            # Jeśli jest tylko jeden kod pocztowy, automatycznie go wybierz
+            if len(allowed_codes) == 1:
+                postal_code = allowed_codes[0]
+                self.data_vars["postal"].set(postal_code)
+                self.data_vars["city"].set(POSTAL_CODES.get(postal_code, ""))
+
             # Aktualizacja listy miejscowości
             self.contract_form.update_locations(gmina_code)
 
