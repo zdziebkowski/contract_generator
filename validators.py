@@ -30,7 +30,6 @@ class ContractValidator:
             contract_data.gmina,
             contract_data.name,
             contract_data.postal_code,
-            contract_data.street,
             contract_data.house_number
         ]
 

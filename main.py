@@ -80,6 +80,20 @@ class ContractGeneratorApp:
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
 
+    def _on_gmina_select(self):
+        """Handle gmina selection."""
+        selected = self.data_vars["gmina"].get()
+        if ':' in selected:
+            gmina_code = selected.split(':')[0].strip()
+            self.data_vars["gmina"].set(gmina_code)
+
+            # Aktualizacja kodów pocztowych
+            allowed_codes = GMINA_POSTAL_CODES.get(gmina_code, [])
+            self.contract_form.update_postal_codes(allowed_codes)
+
+            # Aktualizacja listy miejscowości
+            self.contract_form.update_locations(gmina_code)
+
     def _select_template(self):
         """Handle template file selection."""
         filename = filedialog.askopenfilename(
@@ -100,15 +114,6 @@ class ContractGeneratorApp:
         directory = filedialog.askdirectory(title="Wybierz folder dla pliku Excel")
         if directory:
             self.path_vars["excel"].set(directory)
-
-    def _on_gmina_select(self):
-        """Handle gmina selection."""
-        selected = self.data_vars["gmina"].get()
-        if ':' in selected:
-            gmina_code = selected.split(':')[0].strip()
-            self.data_vars["gmina"].set(gmina_code)
-            allowed_codes = GMINA_POSTAL_CODES.get(gmina_code, [])
-            self.contract_form.update_postal_codes(allowed_codes)
 
     def _on_postal_select(self):
         """Handle postal code selection."""
@@ -145,6 +150,7 @@ class ContractGeneratorApp:
                 name=values["nazwa"],
                 postal_code=values["kod_pocztowy"],
                 city=values["miasto"],
+                location=values["miejscowosc"],  # Dodajemy to pole
                 street=values["ulica"],
                 house_number=values["numer_domu"],
                 email=values["email"],
