@@ -17,8 +17,8 @@ class ContractData:
     postal_code: str
     city: str
     location: str
-    street: str
     house_number: str
+    street: str = "-"
     email: str = "-"
     phone: str = "-"
 
@@ -35,7 +35,7 @@ class ContractData:
             'nazwa': self.name,
             'kod_pocztowy': self.postal_code,
             'miasto': self.city,
-            'miejscowość': self.location,
+            'miejscowosc': self.location,
             'ulica': self.street,
             'numer_domu': self.house_number,
             'email': self.email or "-",
@@ -74,7 +74,7 @@ class ContractManager:
                 'Nazwa/Imię i nazwisko': contract_data['nazwa'],
                 'Kod pocztowy': contract_data['kod_pocztowy'],
                 'Miasto': contract_data['miasto'],
-                'Miejscowość': contract_data['miejscowosc'],
+                'Miejscowość': contract_data['miejscowosc'],  # Dodajemy to pole
                 'Ulica': contract_data['ulica'],
                 'Numer domu': contract_data['numer_domu'],
                 'Email': contract_data['email'],

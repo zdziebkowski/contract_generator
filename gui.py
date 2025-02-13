@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from tkcalendar import DateEntry
 from typing import Callable, Any, Dict
-from config import POSTAL_CODES, VALID_GMINAS, GMINA_POSTAL_CODES
+from config import POSTAL_CODES, VALID_GMINAS, GMINA_POSTAL_CODES, GMINA_LOCATIONS, MAIN_LOCATIONS
 
 
 class PathSettings(ttk.LabelFrame):
@@ -73,9 +73,10 @@ class ContractForm(ttk.Frame):
         self.city_label = self._add_field("Miasto:", ttk.Label,
                                           {"textvariable": self.data_vars["city"]})
 
-        # Location field
-        self.location_entry = self._add_field("Miejscowość:", ttk.Entry,
-                                              {"width": 40})
+        # Location field (zamiana Entry na Combobox)
+        self.location_combo = self._add_field("Miejscowość:", ttk.Combobox,
+                                              {"values": [], "width": 40})
+        self.location_combo.bind('<<ComboboxSelected>>', self._on_location_select)
 
         # Street field
         self.street_entry = self._add_field("Ulica:", ttk.Entry,
@@ -91,11 +92,12 @@ class ContractForm(ttk.Frame):
         self.phone_entry = self._add_field("Telefon (opcjonalnie):", ttk.Entry,
                                            {"width": 40})
 
-        ttk.Label(self, text="").grid(row=11, column=0, pady=10)  # Dodatkowy odstęp
+        # Spacing
+        ttk.Label(self, text="").grid(row=11, column=0, pady=10)
 
         # Buttons
         button_frame = ttk.Frame(self)
-        button_frame.grid(row=12, column=0, columnspan=2, pady=20)  # Zwiększone pady z 10 na 20
+        button_frame.grid(row=12, column=0, columnspan=2, pady=20)
 
         ttk.Button(button_frame, text="Generuj umowę",
                    command=self.callbacks["generate"]).pack(side=tk.LEFT, padx=10)
@@ -120,31 +122,69 @@ class ContractForm(ttk.Frame):
 
     def get_values(self) -> dict:
         """Get all form values."""
+        selected_gmina = self.data_vars["gmina"].get().split(':')[0].strip() if ':' in self.data_vars[
+            "gmina"].get() else self.data_vars["gmina"].get()
+        selected_location = self.location_combo.get()
+
+        # Jeśli to główna miejscowość gminy lub MO, zostawiamy puste
+        if (selected_location == MAIN_LOCATIONS.get(selected_gmina) or
+                selected_gmina == "MO" or
+                selected_location == selected_gmina):  # np. Raszków dla gminy Raszków
+            location = ""
+        else:
+            location = selected_location
+
         return {
             "data": self.date_entry.get(),
-            "gmina": self.data_vars["gmina"].get().split(':')[0].strip() if ':' in self.data_vars["gmina"].get() else
-            self.data_vars["gmina"].get(),
+            "gmina": selected_gmina,
             "nazwa": self.name_entry.get(),
             "kod_pocztowy": self.data_vars["postal"].get().split(':')[0].strip() if ':' in self.data_vars[
                 "postal"].get() else self.data_vars["postal"].get(),
             "miasto": self.data_vars["city"].get(),
-            "miejscowosc": self.location_entry.get(),
-            "ulica": self.street_entry.get(),
+            "miejscowosc": location,
+            "ulica": self.street_entry.get() or "-",
             "numer_domu": self.house_entry.get(),
             "email": self.email_entry.get() or "-",
             "tel": self.phone_entry.get() or "-",
         }
 
+    def _on_location_select(self, event=None):
+        """Handle location selection."""
+        selected_location = self.location_combo.get()
+        selected_gmina = self.data_vars["gmina"].get().split(':')[0].strip()
+
+        # Jeśli wybrana miejscowość jest główną miejscowością gminy, wyczyść pole
+        if selected_location == MAIN_LOCATIONS.get(selected_gmina):
+            self.location_combo.set('')
+
+    def update_locations(self, gmina_code: str):
+        """Update location combobox values based on selected gmina."""
+        if not gmina_code:
+            self.location_combo['values'] = []
+            return
+
+        # Dla MO zawsze puste
+        if gmina_code == "MO":
+            self.location_combo['values'] = []
+            self.location_combo.set('')
+            return
+
+        # Dla pozostałych gmin pobierz listę miejscowości
+        locations = GMINA_LOCATIONS.get(gmina_code, [])
+        self.location_combo['values'] = locations
+        self.location_combo.set('')
+
     def clear_fields(self):
         """Clear all form fields."""
         entries = [self.name_entry, self.street_entry, self.house_entry,
-                   self.email_entry, self.phone_entry, self.location_entry]
+                   self.email_entry, self.phone_entry]
         for entry in entries:
             entry.delete(0, tk.END)
 
         self.data_vars["gmina"].set("")
         self.data_vars["postal"].set("")
         self.data_vars["city"].set("")
+        self.location_combo.set("")
 
     def update_postal_codes(self, allowed_codes: list):
         """Update postal code combobox values based on selected gmina."""
