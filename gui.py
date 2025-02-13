@@ -124,15 +124,9 @@ class ContractForm(ttk.Frame):
         """Get all form values."""
         selected_gmina = self.data_vars["gmina"].get().split(':')[0].strip() if ':' in self.data_vars[
             "gmina"].get() else self.data_vars["gmina"].get()
-        selected_location = self.location_combo.get()
 
-        # Jeśli to główna miejscowość gminy lub MO, zostawiamy puste
-        if (selected_location == MAIN_LOCATIONS.get(selected_gmina) or
-                selected_gmina == "MO" or
-                selected_location == selected_gmina):  # np. Raszków dla gminy Raszków
-            location = ""
-        else:
-            location = selected_location
+        # Nowa, uproszczona logika dla location
+        location = self.location_combo.get() if self.location_combo['state'] != 'disabled' else ""
 
         return {
             "data": self.date_entry.get(),
@@ -142,7 +136,7 @@ class ContractForm(ttk.Frame):
                 "postal"].get() else self.data_vars["postal"].get(),
             "miasto": self.data_vars["city"].get(),
             "miejscowosc": location,
-            "ulica": self.street_entry.get() or "-",
+            "ulica": self.street_entry.get() or "",
             "numer_domu": self.house_entry.get(),
             "email": self.email_entry.get() or "-",
             "tel": self.phone_entry.get() or "-",
@@ -161,18 +155,22 @@ class ContractForm(ttk.Frame):
         """Update location combobox values based on selected gmina."""
         if not gmina_code:
             self.location_combo['values'] = []
+            self.location_combo['state'] = 'readonly'
             return
 
-        # Dla MO zawsze puste
+        # Dla MO zawsze wyłączone
         if gmina_code == "MO":
             self.location_combo['values'] = []
             self.location_combo.set('')
+            self.location_combo['state'] = 'disabled'
             return
 
-        # Dla pozostałych gmin pobierz listę miejscowości
-        locations = GMINA_LOCATIONS.get(gmina_code, [])
+        # Dla pozostałych gmin pobierz listę miejscowości, ale usuń główną miejscowość
+        locations = [loc for loc in GMINA_LOCATIONS.get(gmina_code, [])
+                     if loc != MAIN_LOCATIONS.get(gmina_code)]
         self.location_combo['values'] = locations
         self.location_combo.set('')
+        self.location_combo['state'] = 'readonly'
 
     def clear_fields(self):
         """Clear all form fields."""
@@ -190,5 +188,11 @@ class ContractForm(ttk.Frame):
         """Update postal code combobox values based on selected gmina."""
         postal_values = [f"{code}: {POSTAL_CODES[code]}" for code in allowed_codes]
         self.postal_combo['values'] = postal_values
-        if postal_values:
+
+        # Dla pojedynczego kodu ustawiamy wartość bez konieczności wyboru
+        if len(postal_values) == 1:
             self.postal_combo.set(postal_values[0])
+            self.callbacks["on_postal_select"]()
+        # Dla wielu kodów (Gmina Ostrów) czyścimy wybór
+        elif len(postal_values) > 1:
+            self.postal_combo.set('')
