@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Desktop application for generating, numbering and managing waste disposal service contracts with Excel registry integration."
 authors = ["zdziebkowski <wojciech.zdziebkowski@gmail.com>"]
 readme = "README.md"
+packages = [{include = "."}]  # Dodaj tę linię
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"

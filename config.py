@@ -7,37 +7,31 @@ POSTAL_CODES = {
     "63-410": "Ostrów Wielkopolski",
     "63-421": "Przygodzice",
     "63-430": "Odolanów",
-    "63-435": "Sośnie",
     "63-440": "Raszków",
     "63-450": "Sobótka",
-    "63-460": "Nowe Skalmierzyce"
 }
 
 VALID_GMINAS = {
-    "GO": "Gmina Odolanów",
-    "MO": "Miasto Odolanów",
+    "GO": "Gmina Ostrów",
+    "MO": "Miasto Ostrów",
     "O": "Odolanów",
     "R": "Raszków",
     "S": "Sieroszewice",
     "P": "Przygodzice",
-    "NS": "Nowe Skalmierzyce",
-    "So": "Sośnie"
 }
 
 GMINA_POSTAL_CODES = {
     "MO": ["63-400"],
-    "GO": ["63-410", "63-450"],
+    "GO": ["63-410", "63-450", "63-400"],
     "R": ["63-440"],
     "O": ["63-430"],
     "S": ["63-405"],
     "P": ["63-421"],
-    "NS": ["63-460"],
-    "So": ["63-435"]
 }
 
 DEFAULT_PATHS = {
     "template": "Umowa_template.docx",
     "contracts": "wystawione_umowy",
-    "excel": ".",
+    "excel": "wystawione_umowy",
     "excel_filename": "spis_umow_automat.xlsx"
 }

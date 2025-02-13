@@ -16,6 +16,7 @@ class ContractData:
     name: str
     postal_code: str
     city: str
+    location: str
     street: str
     house_number: str
     email: str = "-"
@@ -34,6 +35,7 @@ class ContractData:
             'nazwa': self.name,
             'kod_pocztowy': self.postal_code,
             'miasto': self.city,
+            'miejscowość': self.location,
             'ulica': self.street,
             'numer_domu': self.house_number,
             'email': self.email or "-",
@@ -52,7 +54,7 @@ class ContractManager:
         if not os.path.exists(output_folder):
             return 1
 
-        pattern = f"Umowa_(\d+)_{year}_{gmina}_"
+        pattern = rf"Umowa_(\d+)_{year}_{gmina}_"  # Dodane 'r' przed stringiem
         max_nr = max(
             (int(match.group(1))
              for file in os.listdir(output_folder)
@@ -72,6 +74,7 @@ class ContractManager:
                 'Nazwa/Imię i nazwisko': contract_data['nazwa'],
                 'Kod pocztowy': contract_data['kod_pocztowy'],
                 'Miasto': contract_data['miasto'],
+                'Miejscowość': contract_data['miejscowosc'],
                 'Ulica': contract_data['ulica'],
                 'Numer domu': contract_data['numer_domu'],
                 'Email': contract_data['email'],
