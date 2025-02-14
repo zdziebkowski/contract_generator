@@ -92,8 +92,13 @@ class ContractForm(ttk.Frame):
         self.phone_entry = self._add_field("Telefon (opcjonalnie):", ttk.Entry,
                                            {"width": 40})
 
+        # Eco field
+        self.eco_combo = self._add_field("Czy EKO?:", ttk.Combobox,
+                                         {"values": ["nie", "tak"], "width": 40, "state": "readonly"})
+        self.eco_combo.set("nie")  # Set default value
+
         # Spacing
-        ttk.Label(self, text="").grid(row=11, column=0, pady=10)
+        ttk.Label(self, text="").grid(row=12, column=0, pady=10)
 
         # Buttons
         button_frame = ttk.Frame(self)
@@ -114,7 +119,18 @@ class ContractForm(ttk.Frame):
         widget_kwargs = widget_kwargs or {}
         row = len(self.grid_slaves()) // 2
 
-        ttk.Label(self, text=label).grid(row=row, column=0, sticky=tk.W, pady=5)
+        # Create a frame for the label and hint
+        label_frame = ttk.Frame(self)
+        label_frame.grid(row=row, column=0, sticky=tk.W, pady=5)
+
+        # Add main label
+        ttk.Label(label_frame, text=label).pack(side=tk.LEFT)
+
+        # Add hint based on widget type
+        hint_text = " (wybierz z listy)" if widget_class in [ttk.Combobox, DateEntry] else " (wpisz ręcznie) "
+        ttk.Label(label_frame, text=hint_text, foreground='gray').pack(side=tk.LEFT)
+
+        # Add widget
         widget = widget_class(self, **widget_kwargs)
         widget.grid(row=row, column=1, sticky=tk.W, pady=5)
 
@@ -140,6 +156,7 @@ class ContractForm(ttk.Frame):
             "numer_domu": self.house_entry.get(),
             "email": self.email_entry.get() or "-",
             "tel": self.phone_entry.get() or "-",
+            "is_eco": self.eco_combo.get(),
         }
 
     def _on_location_select(self, event=None):

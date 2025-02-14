@@ -21,6 +21,14 @@ class ContractGeneratorApp:
         self.root.title("Generator Umów")
         self.root.geometry("800x900")
 
+        # Ustawienie większej czcionki dla całej aplikacji
+        default_font = ('TkDefaultFont', 12)  # zwiększenie z domyślnego 9/10 na 12
+        self.root.option_add('*Font', default_font)
+
+        # Ustawienie większej czcionki dla widgetów ttk
+        style = ttk.Style()
+        style.configure('.', font=default_font)
+
         # Initialize variables
         self.path_vars = self._init_path_vars()
         self.data_vars = self._init_data_vars()
@@ -160,7 +168,8 @@ class ContractGeneratorApp:
                 street=values["ulica"],
                 house_number=values["numer_domu"],
                 email=values["email"],
-                phone=values["tel"]
+                phone=values["tel"],
+                is_eco=values["is_eco"]
             )
 
             # Validate data
