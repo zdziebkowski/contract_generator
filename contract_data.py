@@ -21,6 +21,7 @@ class ContractData:
     street: str = "-"
     email: str = "-"
     phone: str = "-"
+    is_eco: str = "nie"
 
     @property
     def full_address(self) -> str:
@@ -79,6 +80,7 @@ class ContractManager:
                 'Numer domu': contract_data['numer_domu'],
                 'Email': contract_data['email'],
                 'Telefon': contract_data['tel'],
+                'EKO': contract_data['is_eco'],
                 'Data dodania': datetime.now().strftime("%d.%m.%Y %H:%M")
             }])
 
