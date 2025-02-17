@@ -41,6 +41,7 @@ class ContractData:
             'numer_domu': self.house_number,
             'email': self.email or "-",
             'tel': self.phone or "-",
+            'is_eco': self.is_eco,
             'nr': str(contract_number),
             'rok': year
         }
