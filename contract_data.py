@@ -75,17 +75,19 @@ class ContractManager:
                 'Nazwa/Imię i nazwisko': contract_data['nazwa'],
                 'Kod pocztowy': contract_data['kod_pocztowy'],
                 'Miasto': contract_data['miasto'],
-                'Miejscowość': contract_data['miejscowosc'],
+                'Miejscowość': contract_data.get('miejscowosc', ''),
                 'Ulica': contract_data['ulica'],
                 'Numer domu': contract_data['numer_domu'],
                 'Email': contract_data['email'],
                 'Telefon': contract_data['tel'],
-                'EKO': contract_data['is_eco'],
+                'EKO': contract_data.get('is_eco', 'nie'),
                 'Data dodania': datetime.now().strftime("%d.%m.%Y %H:%M")
             }])
 
             if os.path.exists(excel_path):
                 existing_df = pd.read_excel(excel_path)
+                if 'EKO' not in existing_df.columns:
+                    existing_df['EKO'] = 'nie'
                 df = pd.concat([existing_df, df], ignore_index=True)
 
             df.to_excel(excel_path, index=False)
