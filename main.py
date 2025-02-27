@@ -21,11 +21,9 @@ class ContractGeneratorApp:
         self.root.title("Generator Umów")
         self.root.geometry("800x900")
 
-        # Ustawienie większej czcionki dla całej aplikacji
         default_font = ('TkDefaultFont', 12)  # zwiększenie z domyślnego 9/10 na 12
         self.root.option_add('*Font', default_font)
 
-        # Ustawienie większej czcionki dla widgetów ttk
         style = ttk.Style()
         style.configure('.', font=default_font)
 
@@ -95,17 +93,14 @@ class ContractGeneratorApp:
             gmina_code = selected.split(':')[0].strip()
             self.data_vars["gmina"].set(gmina_code)
 
-            # Aktualizacja kodów pocztowych
             allowed_codes = GMINA_POSTAL_CODES.get(gmina_code, [])
             self.contract_form.update_postal_codes(allowed_codes)
 
-            # Jeśli jest tylko jeden kod pocztowy, automatycznie go wybierz
             if len(allowed_codes) == 1:
                 postal_code = allowed_codes[0]
                 self.data_vars["postal"].set(postal_code)
                 self.data_vars["city"].set(POSTAL_CODES.get(postal_code, ""))
 
-            # Aktualizacja listy miejscowości
             self.contract_form.update_locations(gmina_code)
 
     def _select_template(self):
@@ -169,7 +164,8 @@ class ContractGeneratorApp:
                 house_number=values["numer_domu"],
                 email=values["email"],
                 phone=values["tel"],
-                is_eco=values["is_eco"]
+                is_eco=values["is_eco"],
+                nip=values["nip"]
             )
 
             # Validate data

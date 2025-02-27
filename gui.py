@@ -62,6 +62,10 @@ class ContractForm(ttk.Frame):
         self.name_entry = self._add_field("Nazwa/Imię i nazwisko:", ttk.Entry,
                                           {"width": 40})
 
+        # NIP field (DODANE)
+        self.nip_entry = self._add_field("NIP (opcjonalnie):", ttk.Entry,
+                                         {"width": 40})
+
         # Postal code field
         postal_values = [f"{code}: {city}" for code, city in POSTAL_CODES.items()]
         self.postal_combo = self._add_field("Kod pocztowy:", ttk.Combobox,
@@ -141,13 +145,13 @@ class ContractForm(ttk.Frame):
         selected_gmina = self.data_vars["gmina"].get().split(':')[0].strip() if ':' in self.data_vars[
             "gmina"].get() else self.data_vars["gmina"].get()
 
-        # Nowa, uproszczona logika dla location
         location = self.location_combo.get() if self.location_combo['state'] != 'disabled' else ""
 
         return {
             "data": self.date_entry.get(),
             "gmina": selected_gmina,
             "nazwa": self.name_entry.get(),
+            "nip": self.nip_entry.get() or "",
             "kod_pocztowy": self.data_vars["postal"].get().split(':')[0].strip() if ':' in self.data_vars[
                 "postal"].get() else self.data_vars["postal"].get(),
             "miasto": self.data_vars["city"].get(),
@@ -164,7 +168,6 @@ class ContractForm(ttk.Frame):
         selected_location = self.location_combo.get()
         selected_gmina = self.data_vars["gmina"].get().split(':')[0].strip()
 
-        # Jeśli wybrana miejscowość jest główną miejscowością gminy, wyczyść pole
         if selected_location == MAIN_LOCATIONS.get(selected_gmina):
             self.location_combo.set('')
 
@@ -175,14 +178,12 @@ class ContractForm(ttk.Frame):
             self.location_combo['state'] = 'readonly'
             return
 
-        # Dla MO zawsze wyłączone
         if gmina_code == "MO":
             self.location_combo['values'] = []
             self.location_combo.set('')
             self.location_combo['state'] = 'disabled'
             return
 
-        # Dla pozostałych gmin pobierz listę miejscowości, ale usuń główną miejscowość
         locations = [loc for loc in GMINA_LOCATIONS.get(gmina_code, [])
                      if loc != MAIN_LOCATIONS.get(gmina_code)]
         self.location_combo['values'] = locations
@@ -191,7 +192,7 @@ class ContractForm(ttk.Frame):
 
     def clear_fields(self):
         """Clear all form fields."""
-        entries = [self.name_entry, self.street_entry, self.house_entry,
+        entries = [self.name_entry, self.nip_entry, self.street_entry, self.house_entry,
                    self.email_entry, self.phone_entry]
         for entry in entries:
             entry.delete(0, tk.END)
@@ -206,10 +207,9 @@ class ContractForm(ttk.Frame):
         postal_values = [f"{code}: {POSTAL_CODES[code]}" for code in allowed_codes]
         self.postal_combo['values'] = postal_values
 
-        # Dla pojedynczego kodu ustawiamy wartość bez konieczności wyboru
+
         if len(postal_values) == 1:
             self.postal_combo.set(postal_values[0])
             self.callbacks["on_postal_select"]()
-        # Dla wielu kodów (Gmina Ostrów) czyścimy wybór
         elif len(postal_values) > 1:
             self.postal_combo.set('')
