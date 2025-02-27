@@ -80,7 +80,6 @@ GMINA_LOCATIONS = {
     ]
 }
 
-# Słownik mapujący gminy na ich główne miejscowości (które mają być pomijane)
 MAIN_LOCATIONS = {
     "MO": "Ostrów Wielkopolski",
     "O": "Odolanów",

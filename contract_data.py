@@ -22,6 +22,7 @@ class ContractData:
     email: str = "-"
     phone: str = "-"
     is_eco: str = "nie"
+    nip: str = ""
 
     @property
     def full_address(self) -> str:
@@ -41,9 +42,9 @@ class ContractData:
             'numer_domu': self.house_number,
             'email': self.email or "-",
             'tel': self.phone or "-",
-            'is_eco': self.is_eco,
             'nr': str(contract_number),
-            'rok': year
+            'rok': year,
+            'nip': self.nip or ""
         }
 
 
@@ -74,21 +75,20 @@ class ContractManager:
                 'Numer umowy': f"{contract_data['nr']}/{contract_data['rok']}/{contract_data['gmina']}",
                 'Gmina': contract_data['gmina'],
                 'Nazwa/Imię i nazwisko': contract_data['nazwa'],
+                'NIP': contract_data['nip'],
                 'Kod pocztowy': contract_data['kod_pocztowy'],
                 'Miasto': contract_data['miasto'],
-                'Miejscowość': contract_data.get('miejscowosc', ''),
+                'Miejscowość': contract_data['miejscowosc'],
                 'Ulica': contract_data['ulica'],
                 'Numer domu': contract_data['numer_domu'],
                 'Email': contract_data['email'],
                 'Telefon': contract_data['tel'],
-                'EKO': contract_data.get('is_eco', 'nie'),
+                'EKO': contract_data['is_eco'],
                 'Data dodania': datetime.now().strftime("%d.%m.%Y %H:%M")
             }])
 
             if os.path.exists(excel_path):
                 existing_df = pd.read_excel(excel_path)
-                if 'EKO' not in existing_df.columns:
-                    existing_df['EKO'] = 'nie'
                 df = pd.concat([existing_df, df], ignore_index=True)
 
             df.to_excel(excel_path, index=False)
