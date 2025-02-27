@@ -164,7 +164,8 @@ class ContractGeneratorApp:
                 house_number=values["numer_domu"],
                 email=values["email"],
                 phone=values["tel"],
-                is_eco=values["is_eco"]
+                is_eco=values["is_eco"],
+                nip=values["nip"]
             )
 
             # Validate data

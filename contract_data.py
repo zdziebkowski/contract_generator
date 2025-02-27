@@ -44,7 +44,8 @@ class ContractData:
             'tel': self.phone or "-",
             'nr': str(contract_number),
             'rok': year,
-            'nip': self.nip or ""
+            'nip': self.nip or "",
+            'is_eco': self.is_eco
         }
 
 
