@@ -20,6 +20,9 @@ spis_umow_automat.xlsx
 convert_icon.py
 wystawione_umowy/
 
+# Junk drawer (backups, old binaries, unused assets)
+inne/
+
 # IDE specific
 .idea/
 .vscode/
